@@ -5,7 +5,8 @@ from . import views
 app_name = 'explorer'
 
 urlpatterns = [
-    path('', views.Collections.as_view(), name='collections'),
+    path('', views.CollectionsList.as_view(), name='collections'),
     path('fetch/', views.FetchData.as_view(), name='fetch'),
+
 
 ]

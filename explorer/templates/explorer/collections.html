@@ -2,4 +2,26 @@
 
 {% block content %}
     <h2>Collections <a href="{% url 'explorer:fetch' %}" class="btn btn-success">Fetch</a></h2>
+
+
+
+    <table class="table">
+        <tbody>
+        {% for data in people_data %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td><a href="{% url 'explorer:details' pk=data.pk %}">{{ data.file_name }}</a></td>
+
+
+            </tr>
+        {% empty %}
+            <p>list is empty</p>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+
+
+
 {% endblock %}
