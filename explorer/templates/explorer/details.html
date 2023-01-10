@@ -1,1 +1,43 @@
-asdasd
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">name</th>
+            <th scope="col">height</th>
+            <th scope="col">mass</th>
+            <th scope="col">hair_color</th>
+            <th scope="col">skin_color</th>
+            <th scope="col">eye_color</th>
+            <th scope="col">birth_year</th>
+            <th scope="col">gender</th>
+            <th scope="col">planet</th>
+            <th scope="col">date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for person in context %}
+            <tr>
+                <td>{{ person.name }}</td>
+                <td>{{ person.height }}</td>
+                <td>{{ person.mass }}</td>
+                <td>{{ person.hair_color }}</td>
+                <td>{{ person.skin_color }}</td>
+                <td>{{ person.eye_color }}</td>
+                <td>{{ person.birth_year }}</td>
+                <td>{{ person.gender }}</td>
+                <td>{{ person.planet }}</td>
+                <td>{{ person.date }}</td>
+            </tr>
+        {% empty %}
+            <p>List is empty</p>
+        {% endfor %}
+
+        </tbody>
+    </table>
+{% endblock %}

@@ -20,9 +20,9 @@ class FetchData(View):
     def get(self, request):
         get_count = requests.get('https://swapi.dev/api/people')
         count = get_count.json()['count']
-        pages = 1 #(count // 10) + 1
+        pages = (count // 10) + 1
         people_data = []
-        c = 1 # -------------
+        c = 1  # -------------
         for page in range(1, pages + 1):
             response = requests.get(f'https://swapi.dev/api/people/?page={page}')
             for character in response.json()['results']:
@@ -51,3 +51,19 @@ class FetchData(View):
         return redirect(reverse('explorer:collections'))
 
 
+class CollectionDetails(View):
+    def get(self, request, pk):
+        people_data = models.Collection.objects.get(pk=pk)
+        context = []
+
+        with open(f"./{people_data.file_name}.csv", 'r') as file:
+            csvreader = csv.reader(file)
+            print(csvreader)
+            for row in csvreader:
+                if row[0] != 'name':
+                    person = {'name': row[0], 'height': row[1], 'mass': row[2], 'hair_color': row[3], 'skin_color': row[4],
+                              'eye_color': row[5], 'birth_year': row[6], 'gender': row[7], 'planet': row[8],
+                              'date': row[9]}
+                    context.append(person)
+        print(context)
+        return render(request, 'explorer/details.html', {'context': context})
