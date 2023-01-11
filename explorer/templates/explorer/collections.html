@@ -9,8 +9,8 @@
         <tbody>
         {% for data in people_data %}
             <tr>
-                <th scope="row">{{ forloop.counter }}</th>
-                <td><a href="{% url 'explorer:details' pk=data.pk %}">{{ data.file_name }}</a></td>
+
+                <td><a href="{% url 'explorer:details' pk=data.pk %}">{{ data.date }}</a></td>
 
 
             </tr>

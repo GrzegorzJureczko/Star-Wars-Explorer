@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
@@ -5,9 +6,6 @@ import requests
 from datetime import date, datetime
 import csv
 from explorer import models
-
-
-# Create your views here.
 
 
 class CollectionsList(View):
@@ -31,7 +29,7 @@ class FetchData(View):
                           character['skin_color'], character['eye_color'], character['birth_year'],
                           character['gender'], planet.json()['name'], date.today()]
                 people_data.append(person)
-                print(character['name'])
+                print(character['name'])  # -------------
                 print(c)  # -------------
                 c += 1  # -------------
 
@@ -54,16 +52,23 @@ class FetchData(View):
 class CollectionDetails(View):
     def get(self, request, pk):
         people_data = models.Collection.objects.get(pk=pk)
-        context = []
 
-        with open(f"./{people_data.file_name}.csv", 'r') as file:
-            csvreader = csv.reader(file)
-            print(csvreader)
-            for row in csvreader:
-                if row[0] != 'name':
-                    person = {'name': row[0], 'height': row[1], 'mass': row[2], 'hair_color': row[3], 'skin_color': row[4],
-                              'eye_color': row[5], 'birth_year': row[6], 'gender': row[7], 'planet': row[8],
-                              'date': row[9]}
-                    context.append(person)
-        print(context)
-        return render(request, 'explorer/details.html', {'context': context})
+        return render(request, 'explorer/details.html', {'poeple_data': people_data, 'page_id': pk})
+
+
+class CollectionJSONDetails(View):
+    def get(self, request, pk, *args, **kwargs):
+        print(kwargs)
+        upper = kwargs.get('num_posts')
+        lower = upper - 10
+        jsonArray = []
+        people_data = models.Collection.objects.get(pk=pk)
+        with open(f"./{people_data.file_name}.csv", encoding='utf-8') as file:
+            csvReader = csv.DictReader(file)
+            for row in csvReader:
+                jsonArray.append(row)
+        number_of_characters = len(jsonArray)
+        max_size = True if upper >= number_of_characters else False
+        jsonArray = jsonArray[lower:upper]
+
+        return JsonResponse({'data': jsonArray, 'max': max_size, 'page_id': pk}, safe=False)
