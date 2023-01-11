@@ -16,18 +16,36 @@ class CollectionsList(View):
 
 class FetchData(View):
     def get(self, request):
+        """
+        to prevent sending request with every character, a dictionary of planets is built up. With url as key and planet as value.
+        """
+        get_planets_count = requests.get('https://swapi.dev/api/planets')
+        planets_count = get_planets_count.json()['count']
+        planets_pages = (planets_count // (len(get_planets_count.json()['results'])))
+        if planets_count % 10 != 0:
+            planets_pages += 1
+
+        planets = {}
+        for page in range(1, planets_pages + 1):
+            response = requests.get(f'https://swapi.dev/api/planets/?page={page}')
+            for planet in response.json()['results']:
+                planets[planet['url']] = planet['name']
+        print(planets)
+
         get_count = requests.get('https://swapi.dev/api/people')
         count = get_count.json()['count']
-        pages = (count // 10) + 1
+        pages = (count // (len(get_count.json()['results'])))
+        if count % 10 != 0:
+            pages += 1
         people_data = []
         c = 1  # -------------
         for page in range(1, pages + 1):
             response = requests.get(f'https://swapi.dev/api/people/?page={page}')
             for character in response.json()['results']:
-                planet = requests.get(character['homeworld'])
+                planet = planets[character['homeworld']]
                 person = [character['name'], character['height'], character['mass'], character['hair_color'],
                           character['skin_color'], character['eye_color'], character['birth_year'],
-                          character['gender'], planet.json()['name'], date.today()]
+                          character['gender'], planet, date.today()]
                 people_data.append(person)
                 print(character['name'])  # -------------
                 print(c)  # -------------
