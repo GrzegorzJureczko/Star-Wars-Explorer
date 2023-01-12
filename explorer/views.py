@@ -10,6 +10,7 @@ from explorer import models
 
 
 class CollectionsList(View):
+    """displays list of all files saved"""
     def get(self, request):
         characters_data = models.Collection.objects.all()
         return render(request, 'explorer/collections.html', {'characters_data': characters_data})
@@ -17,8 +18,9 @@ class CollectionsList(View):
 
 class FetchData(View):
     def get(self, request):
-
-        """counts how many pages of planets exists"""
+        """
+        counts how many pages of planets exists
+        """
         get_homelands_count = requests.get('https://swapi.dev/api/planets')
         homelands_count = get_homelands_count.json()['count']
         homelands_pages = (homelands_count // (len(get_homelands_count.json()['results'])))
@@ -33,7 +35,6 @@ class FetchData(View):
             response = requests.get(f'https://swapi.dev/api/planets/?page={page}')
             for homeland in response.json()['results']:
                 homelands[homeland['url']] = homeland['name']
-        print(homelands)
 
         """counts how many pages of characters exists"""
         get_count = requests.get('https://swapi.dev/api/people')
@@ -42,7 +43,6 @@ class FetchData(View):
         if count % 10 != 0:
             pages += 1
         characters_data = []
-        c = 1  # -------------
 
         """collects data of characters and transforms it into saveable in csv file"""
         for page in range(1, pages + 1):
@@ -53,9 +53,6 @@ class FetchData(View):
                         character['skin_color'], character['eye_color'], character['birth_year'],
                         character['gender'], homeland, date.today()]
                 characters_data.append(char)
-                print(character['name'])  # -------------
-                print(c)  # -------------
-                c += 1  # -------------
 
         """creates header and saves it to csv file"""
         header = ['name', 'height', 'mass', 'hair_color', 'skin_color', 'eye_color', 'birth_year', 'gender',
@@ -101,12 +98,12 @@ class CollectionJSONDetails(View):
         return JsonResponse({'data': jsonArray, 'max': max_size}, safe=False)
 
 
-
-
 class CollectionDetailsFilter(View):
     def get(self, request, pk):
-        """displays data to template with filter functionality
+        """
+        displays data to template with filter functionality
         for improvement it can be merged with CollectionDetails view
+        count functionality is not implemented
         """
         jsonArray = []
         characters_data = models.Collection.objects.get(pk=pk)
@@ -114,7 +111,4 @@ class CollectionDetailsFilter(View):
             csvReader = csv.DictReader(file)
             for row in csvReader:
                 jsonArray.append(row)
-        print((jsonArray))
         return render(request, 'explorer/filter.html', {'collection': jsonArray, 'characters_data': characters_data})
-
-
