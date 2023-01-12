@@ -7,12 +7,9 @@
 
     <table class="table">
         <tbody>
-        {% for data in people_data %}
+        {% for character in characters_data %}
             <tr>
-
-                <td><a href="{% url 'explorer:details' pk=data.pk %}">{{ data.date }}</a></td>
-
-
+                <td><a href="{% url 'explorer:details' pk=character.pk %}">{{ character.date }}</a></td>
             </tr>
         {% empty %}
             <p>list is empty</p>
