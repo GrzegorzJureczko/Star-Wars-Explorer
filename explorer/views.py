@@ -18,9 +18,7 @@ class CollectionsList(View):
 class FetchData(View):
     def get(self, request):
 
-        """
-        counts how many pages of planets exists
-        """
+        """counts how many pages of planets exists"""
         get_homelands_count = requests.get('https://swapi.dev/api/planets')
         homelands_count = get_homelands_count.json()['count']
         homelands_pages = (homelands_count // (len(get_homelands_count.json()['results'])))
@@ -37,9 +35,7 @@ class FetchData(View):
                 homelands[homeland['url']] = homeland['name']
         print(homelands)
 
-        """
-        counts how many pages of characters exists
-        """
+        """counts how many pages of characters exists"""
         get_count = requests.get('https://swapi.dev/api/people')
         count = get_count.json()['count']
         pages = (count // (len(get_count.json()['results'])))
@@ -48,9 +44,7 @@ class FetchData(View):
         characters_data = []
         c = 1  # -------------
 
-        """
-        collects data of characters and transforms it into saveable in csv file
-        """
+        """collects data of characters and transforms it into saveable in csv file"""
         for page in range(1, pages + 1):
             response = requests.get(f'https://swapi.dev/api/people/?page={page}')
             for character in response.json()['results']:
@@ -63,9 +57,7 @@ class FetchData(View):
                 print(c)  # -------------
                 c += 1  # -------------
 
-        """
-        creates header and saves it to csv file
-        """
+        """creates header and saves it to csv file"""
         header = ['name', 'height', 'mass', 'hair_color', 'skin_color', 'eye_color', 'birth_year', 'gender',
                   'homeworld',
                   'date']
@@ -76,9 +68,7 @@ class FetchData(View):
             writer.writerow(header)
             writer.writerows(data)
 
-        """
-        saves files information in database
-        """
+        """saves files information in database"""
         csv_object = models.Collection(file_name=file_name)
         csv_object.save()
 
@@ -87,9 +77,7 @@ class FetchData(View):
 
 class CollectionDetails(View):
     def get(self, request, pk):
-        """
-        Displays list of saved csv files
-        """
+        """Displays list of saved csv files"""
         characters_data = models.Collection.objects.get(pk=pk)
 
         return render(request, 'explorer/details.html', {'characters_data': characters_data, 'page_id': pk})
@@ -111,3 +99,22 @@ class CollectionJSONDetails(View):
         jsonArray = jsonArray[lower:upper]
 
         return JsonResponse({'data': jsonArray, 'max': max_size}, safe=False)
+
+
+
+
+class CollectionDetailsFilter(View):
+    def get(self, request, pk):
+        """displays data to template with filter functionality
+        for improvement it can be merged with CollectionDetails view
+        """
+        jsonArray = []
+        characters_data = models.Collection.objects.get(pk=pk)
+        with open(f"./{characters_data.file_name}.csv", encoding='utf-8') as file:
+            csvReader = csv.DictReader(file)
+            for row in csvReader:
+                jsonArray.append(row)
+        print((jsonArray))
+        return render(request, 'explorer/filter.html', {'collection': jsonArray, 'characters_data': characters_data})
+
+

@@ -12,7 +12,8 @@ const handleGetData = () => {
             max_size = response.max
             const data = response.data
             data.map(character => {
-                charBox.innerHTML += `            <tr>
+                charBox.innerHTML += `            
+            <tr>
             <td>${ character.name }</td>
             <td>${ character.height }</td>
             <td>${ character.mass }</td>
@@ -23,7 +24,7 @@ const handleGetData = () => {
             <td>${ character.gender }</td>
             <td>${ character.homeworld }</td>
             <td>${ character.date }</td>
-        </tr>`
+            </tr>`
             })
             if (max_size) {
                 loadBox.innerHTML = "<h4>No more characters to load</h4>"
