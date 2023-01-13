@@ -11,12 +11,16 @@ from explorer import models
 
 class CollectionsList(View):
     """displays list of all files saved"""
+
     def get(self, request):
         characters_data = models.Collection.objects.all()
+
         return render(request, 'explorer/collections.html', {'characters_data': characters_data})
 
 
 class FetchData(View):
+    """data fetch takes about 30 seconds to get all data"""
+
     def get(self, request):
         """
         counts how many pages of planets exists
@@ -54,7 +58,10 @@ class FetchData(View):
                         character['gender'], homeland, date.today()]
                 characters_data.append(char)
 
-        """creates header and saves it to csv file"""
+        """
+        creates header and saves it to csv file
+        for improvement csv files should be stored in proper destination
+        """
         header = ['name', 'height', 'mass', 'hair_color', 'skin_color', 'eye_color', 'birth_year', 'gender',
                   'homeworld',
                   'date']
@@ -111,4 +118,5 @@ class CollectionDetailsFilter(View):
             csvReader = csv.DictReader(file)
             for row in csvReader:
                 jsonArray.append(row)
+
         return render(request, 'explorer/filter.html', {'collection': jsonArray, 'characters_data': characters_data})

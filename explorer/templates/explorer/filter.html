@@ -11,7 +11,7 @@
 
 {% block content %}
 
-    <h2>{{ characters_data.file_name }}</h2>
+    <h2>{{ characters_data.file_name }} <a href="{% url 'explorer:details' pk=characters_data.pk %}" class="btn btn-outline-primary">Back</a></h2>
     <div id="loading-box">
         <button class="btn btn-primary" id="name-btn">name</button>
         <button class="btn btn-primary" id="height-btn">height</button>
@@ -29,31 +29,31 @@
      <table class="table">
         <thead>
         <tr>
-            <th scope="col" id="name_col">name</th>
-            <th scope="col" id="height_col">height</th>
-            <th scope="col" id="mass_col">mass</th>
-            <th scope="col" id="hair_color_col">hair_color</th>
-            <th scope="col" id="skin_color_col">skin_color</th>
-            <th scope="col" id="eye_color_col">eye_color</th>
-            <th scope="col" id="birth_year_col">birth_year</th>
-            <th scope="col" id="gender_col">gender</th>
-            <th scope="col" id="homeworld_col">homeworld</th>
-            <th scope="col" id="date_col">date</th>
+            <th scope="col">name</th>
+            <th scope="col">height</th>
+            <th scope="col">mass</th>
+            <th scope="col">hair_color</th>
+            <th scope="col">skin_color</th>
+            <th scope="col">eye_color</th>
+            <th scope="col">birth_year</th>
+            <th scope="col">gender</th>
+            <th scope="col">homeworld</th>
+            <th scope="col">date</th>
         </tr>
         </thead>
         <tbody>
         {% for character in collection %}
             <tr>
-                <td id="name_col_data">{{ character.name }}</td>
-                <td id="height_col_data">{{ character.height }}</td>
-                <td id="mass_data">{{ character.mass }}</td>
-                <td id="hair_color_data">{{ character.hair_color }}</td>
-                <td id="skin_color_data">{{ character.skin_color }}</td>
-                <td id="eye_color_data">{{ character.eye_color }}</td>
-                <td id="birth_year_data">{{ character.birth_year }}</td>
-                <td id="gender_data">{{ character.gender }}</td>
-                <td id="homeworld_data">{{ character.homeworld }}</td>
-                <td id="date_data">{{ character.date }}</td>
+                <td>{{ character.name }}</td>
+                <td>{{ character.height }}</td>
+                <td>{{ character.mass }}</td>
+                <td>{{ character.hair_color }}</td>
+                <td>{{ character.skin_color }}</td>
+                <td>{{ character.eye_color }}</td>
+                <td>{{ character.birth_year }}</td>
+                <td>{{ character.gender }}</td>
+                <td>{{ character.homeworld }}</td>
+                <td>{{ character.date }}</td>
             </tr>
         {% empty %}
             <p>List is empty</p>

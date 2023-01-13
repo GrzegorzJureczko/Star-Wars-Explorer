@@ -180,4 +180,5 @@ cython_debug/
 pyvenv.cfg
 pip-selfcheck.json
 
+*.csv
 # End of https://www.toptal.com/developers/gitignore/api/django,venv

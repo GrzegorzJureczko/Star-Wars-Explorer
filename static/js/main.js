@@ -1,6 +1,5 @@
 const charBox = document.getElementById('char-box')
 const loadBtn = document.getElementById('load-btn')
-const loadBox = document.getElementById('loading-box')
 let visible = 10
 
 

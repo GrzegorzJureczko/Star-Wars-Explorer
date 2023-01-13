@@ -6,13 +6,16 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="{% static './js/main.js' %}" async defer></script>
     <script>
-        const page = {{ page_id }}
+        const page =
+        {{ page_id }}
     </script>
 {% endblock %}
 
 {% block content %}
 
-    <h2>{{ characters_data.file_name }}  <a href="{% url 'explorer:details-filter' pk=characters_data.pk %}" class="btn btn-primary">Filter</a></h2>
+    <h2>{{ characters_data.file_name }} <a href="{% url 'explorer:details-filter' pk=characters_data.pk %}"
+                                           class="btn btn-outline-primary m-1">Filter</a><a
+            href="{% url 'explorer:collections' %}" class="btn btn-outline-primary">Back</a></h2>
 
     <table class="table">
         <thead>
